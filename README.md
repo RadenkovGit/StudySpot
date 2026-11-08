@@ -32,6 +32,8 @@ dotnet tool restore
 dotnet ef database update --project StudySpot
 ```
 
+The migrations also seed the place types (Library, Cafe, University, Home, Other) and four sample study places. Applying them again does not duplicate the data.
+
 To use another SQL Server instance, set the `ConnectionStrings__DefaultConnection` environment variable instead of editing the code. For example, in PowerShell:
 
 ```powershell

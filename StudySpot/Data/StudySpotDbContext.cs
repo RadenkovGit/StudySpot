@@ -40,5 +40,8 @@ public class StudySpotDbContext : DbContext
                 "CK_StudySessions_DurationMinutes",
                 $"[DurationMinutes] BETWEEN {SessionMinDurationMinutes} AND {SessionMaxDurationMinutes}"));
         });
+
+        builder.Entity<PlaceType>().HasData(SeedData.PlaceTypes);
+        builder.Entity<StudyPlace>().HasData(SeedData.StudyPlaces);
     }
 }

@@ -41,6 +41,33 @@ namespace StudySpot.Migrations
                         .IsUnique();
 
                     b.ToTable("PlaceTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Library"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Cafe"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "University"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Home"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Other"
+                        });
                 });
 
             modelBuilder.Entity("StudySpot.Data.Entities.StudyPlace", b =>
@@ -79,6 +106,47 @@ namespace StudySpot.Migrations
                     b.HasIndex("PlaceTypeId");
 
                     b.ToTable("StudyPlaces");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            HasPowerOutlets = true,
+                            HasWifi = true,
+                            Location = "Central Square, second floor",
+                            Name = "City Library Reading Room",
+                            Notes = "Quiet at all times. Lockers at the entrance.",
+                            PlaceTypeId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            HasPowerOutlets = false,
+                            HasWifi = true,
+                            Location = "Park Street 12",
+                            Name = "Corner Cafe",
+                            Notes = "Good for short sessions. Gets loud around noon.",
+                            PlaceTypeId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            HasPowerOutlets = true,
+                            HasWifi = true,
+                            Location = "Main campus, building B, room 204",
+                            Name = "Faculty Study Hall",
+                            PlaceTypeId = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            HasPowerOutlets = true,
+                            HasWifi = true,
+                            Location = "Home office",
+                            Name = "Desk at Home",
+                            Notes = "Best for evening sessions.",
+                            PlaceTypeId = 4
+                        });
                 });
 
             modelBuilder.Entity("StudySpot.Data.Entities.StudySession", b =>
