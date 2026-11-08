@@ -1,4 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using StudySpot.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' was not found.");
+
+builder.Services.AddDbContext<StudySpotDbContext>(options =>
+    options.UseSqlServer(connectionString, sqlOptions =>
+        // SQL Server 2019 (the LocalDB version used for development) supports level 150.
+        sqlOptions.UseCompatibilityLevel(150)));
 
 builder.Services.AddControllersWithViews();
 

@@ -10,11 +10,35 @@ This is a learning project built with ASP.NET Core MVC. It is a local, single-us
 
 - .NET 10 (ASP.NET Core MVC, Razor views)
 - Bootstrap (included with the project template)
-- Entity Framework Core with SQL Server (added in the next stages)
+- Entity Framework Core 10 with SQL Server
 
 ## Prerequisites
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
+- SQL Server LocalDB (installed with Visual Studio or SQL Server Express), instance `MSSQLLocalDB`
+
+## Database
+
+The default connection string in `StudySpot/appsettings.json` uses LocalDB with Windows authentication and the database `StudySpotDb`:
+
+```
+Server=(localdb)\MSSQLLocalDB;Database=StudySpotDb;Trusted_Connection=True
+```
+
+From the repository root, restore the local EF Core tool and apply the migrations:
+
+```bash
+dotnet tool restore
+dotnet ef database update --project StudySpot
+```
+
+To use another SQL Server instance, set the `ConnectionStrings__DefaultConnection` environment variable instead of editing the code. For example, in PowerShell:
+
+```powershell
+$env:ConnectionStrings__DefaultConnection = "Server=localhost;Database=StudySpotDb;Trusted_Connection=True;TrustServerCertificate=True"
+```
+
+Set it in the same terminal before running the migration and the application.
 
 ## Run
 
