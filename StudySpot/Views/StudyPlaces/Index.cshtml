@@ -1,0 +1,46 @@
+@model IReadOnlyList<StudyPlaceListItemViewModel>
+
+@{
+    ViewData["Title"] = "Study places";
+}
+
+<h1 class="mb-4">Study places</h1>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">
+        You have no study places yet.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th class="d-none d-md-table-cell">Location</th>
+                    <th class="d-none d-sm-table-cell">Wi-Fi</th>
+                    <th class="d-none d-sm-table-cell">Power outlets</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var place in Model)
+                {
+                    <tr>
+                        <td>@place.Name</td>
+                        <td>@place.PlaceTypeName</td>
+                        <td class="d-none d-md-table-cell">@place.Location</td>
+                        <td class="d-none d-sm-table-cell">@(place.HasWifi ? "Yes" : "No")</td>
+                        <td class="d-none d-sm-table-cell">@(place.HasPowerOutlets ? "Yes" : "No")</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@place.Id">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

@@ -11,9 +11,19 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult Status(int code)
+    {
+        if (code == StatusCodes.Status404NotFound)
+        {
+            return View("NotFound");
+        }
+
+        return Error();
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }

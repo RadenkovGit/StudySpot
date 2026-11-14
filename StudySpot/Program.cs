@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using StudySpot.Data;
+using StudySpot.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ builder.Services.AddDbContext<StudySpotDbContext>(options =>
         // SQL Server 2019 (the LocalDB version used for development) supports level 150.
         sqlOptions.UseCompatibilityLevel(150)));
 
+builder.Services.AddScoped<IStudyPlaceService, StudyPlaceService>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -20,6 +23,8 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
+app.UseStatusCodePagesWithReExecute("/Home/Status", "?code={0}");
 
 app.UseHttpsRedirection();
 app.UseRouting();
