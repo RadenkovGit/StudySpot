@@ -4,7 +4,9 @@ public static class ValidationConstants
 {
     public const int PlaceTypeNameMaxLength = 30;
 
+    public const int PlaceNameMinLength = 2;
     public const int PlaceNameMaxLength = 80;
+    public const int PlaceLocationMinLength = 2;
     public const int PlaceLocationMaxLength = 120;
     public const int PlaceNotesMaxLength = 500;
 
