@@ -46,10 +46,7 @@ public class StudyPlacesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(StudyPlaceFormViewModel model)
     {
-        if (model.PlaceTypeId.HasValue && !await studyPlaceService.PlaceTypeExistsAsync(model.PlaceTypeId.Value))
-        {
-            ModelState.AddModelError(nameof(model.PlaceTypeId), "Please select a valid place type.");
-        }
+        await ValidatePlaceTypeAsync(model);
 
         if (!ModelState.IsValid)
         {
@@ -62,6 +59,87 @@ public class StudyPlacesController : Controller
         TempData["SuccessMessage"] = "The study place was added.";
 
         return RedirectToAction(nameof(Details), new { id });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Edit(int id)
+    {
+        var model = await studyPlaceService.GetForEditAsync(id);
+
+        if (model == null)
+        {
+            return NotFound();
+        }
+
+        await LoadPlaceTypesAsync(model);
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit([FromRoute] int id, StudyPlaceEditViewModel model)
+    {
+        if (!await studyPlaceService.ExistsAsync(id))
+        {
+            return NotFound();
+        }
+
+        model.Id = id;
+
+        await ValidatePlaceTypeAsync(model);
+
+        if (!ModelState.IsValid)
+        {
+            await LoadPlaceTypesAsync(model);
+
+            return View(model);
+        }
+
+        if (!await studyPlaceService.UpdateAsync(model))
+        {
+            return NotFound();
+        }
+
+        TempData["SuccessMessage"] = "The study place was updated.";
+
+        return RedirectToAction(nameof(Details), new { id });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var model = await studyPlaceService.GetForDeleteAsync(id);
+
+        if (model == null)
+        {
+            return NotFound();
+        }
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed([FromRoute] int id)
+    {
+        if (!await studyPlaceService.DeleteAsync(id))
+        {
+            return NotFound();
+        }
+
+        TempData["SuccessMessage"] = "The study place was deleted.";
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    private async Task ValidatePlaceTypeAsync(StudyPlaceFormViewModel model)
+    {
+        if (model.PlaceTypeId.HasValue && !await studyPlaceService.PlaceTypeExistsAsync(model.PlaceTypeId.Value))
+        {
+            ModelState.AddModelError(nameof(model.PlaceTypeId), "Please select a valid place type.");
+        }
     }
 
     private async Task LoadPlaceTypesAsync(StudyPlaceFormViewModel model)

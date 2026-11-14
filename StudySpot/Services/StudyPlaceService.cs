@@ -81,4 +81,74 @@ public class StudyPlaceService : IStudyPlaceService
 
         return place.Id;
     }
+
+    public async Task<bool> ExistsAsync(int id)
+    {
+        return await context.StudyPlaces.AnyAsync(p => p.Id == id);
+    }
+
+    public async Task<StudyPlaceEditViewModel?> GetForEditAsync(int id)
+    {
+        return await context.StudyPlaces
+            .AsNoTracking()
+            .Where(p => p.Id == id)
+            .Select(p => new StudyPlaceEditViewModel
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Location = p.Location,
+                Notes = p.Notes,
+                HasWifi = p.HasWifi,
+                HasPowerOutlets = p.HasPowerOutlets,
+                PlaceTypeId = p.PlaceTypeId
+            })
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<bool> UpdateAsync(StudyPlaceEditViewModel model)
+    {
+        var place = await context.StudyPlaces.FindAsync(model.Id);
+
+        if (place == null)
+        {
+            return false;
+        }
+
+        place.Name = model.Name;
+        place.Location = model.Location;
+        place.Notes = model.Notes;
+        place.HasWifi = model.HasWifi;
+        place.HasPowerOutlets = model.HasPowerOutlets;
+        place.PlaceTypeId = model.PlaceTypeId!.Value;
+
+        await context.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<StudyPlaceDeleteViewModel?> GetForDeleteAsync(int id)
+    {
+        return await context.StudyPlaces
+            .AsNoTracking()
+            .Where(p => p.Id == id)
+            .Select(p => new StudyPlaceDeleteViewModel
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Location = p.Location,
+                PlaceTypeName = p.PlaceType.Name,
+                SessionsCount = p.StudySessions.Count
+            })
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        // The sessions of the place are removed by the ON DELETE CASCADE foreign key.
+        var deletedRows = await context.StudyPlaces
+            .Where(p => p.Id == id)
+            .ExecuteDeleteAsync();
+
+        return deletedRows > 0;
+    }
 }
