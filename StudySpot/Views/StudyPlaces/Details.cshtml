@@ -21,6 +21,7 @@
     <dd class="col-sm-9">@(string.IsNullOrWhiteSpace(Model.Notes) ? "No notes." : Model.Notes)</dd>
 </dl>
 
+<a class="btn btn-success" asp-controller="StudySessions" asp-action="Create" asp-route-placeId="@Model.Id">Record session</a>
 <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
 <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
 <a class="btn btn-outline-secondary" asp-action="Index">Back to places</a>

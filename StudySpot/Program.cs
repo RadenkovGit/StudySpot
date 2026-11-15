@@ -13,6 +13,7 @@ builder.Services.AddDbContext<StudySpotDbContext>(options =>
         sqlOptions.UseCompatibilityLevel(150)));
 
 builder.Services.AddScoped<IStudyPlaceService, StudyPlaceService>();
+builder.Services.AddScoped<IStudySessionService, StudySessionService>();
 
 builder.Services.AddControllersWithViews();
 

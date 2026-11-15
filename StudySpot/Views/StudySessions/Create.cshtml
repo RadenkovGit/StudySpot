@@ -1,0 +1,58 @@
+@model StudySessionFormViewModel
+
+@{
+    ViewData["Title"] = "Record study session";
+}
+
+<h1 class="mb-4">Record study session</h1>
+
+@if (!Model.Places.Any())
+{
+    <div class="alert alert-info">
+        You need a study place before you can record a session.
+        <a asp-controller="StudyPlaces" asp-action="Create">Add a place</a>.
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-8 col-lg-6">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="StudyPlaceId" class="form-label"></label>
+                    <select asp-for="StudyPlaceId" asp-items="Model.Places" class="form-select">
+                        <option value="">Select a place...</option>
+                    </select>
+                    <span asp-validation-for="StudyPlaceId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Date" class="form-label"></label>
+                    <input asp-for="Date" type="date" max="@Model.MaxDate" class="form-control" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DurationMinutes" class="form-label"></label>
+                    <input asp-for="DurationMinutes" type="number" class="form-control" />
+                    <span asp-validation-for="DurationMinutes" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Notes" class="form-label"></label>
+                    <textarea asp-for="Notes" class="form-control" rows="2"></textarea>
+                    <span asp-validation-for="Notes" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Record session</button>
+                <a class="btn btn-outline-secondary" asp-controller="StudyPlaces" asp-action="Index">Cancel</a>
+            </form>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
