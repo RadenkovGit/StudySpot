@@ -14,11 +14,34 @@ public class StudyPlacesController : Controller
         this.studyPlaceService = studyPlaceService;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string? search, int? typeId)
     {
-        var places = await studyPlaceService.GetAllAsync();
+        // A malformed or unknown type id is an error, not something to ignore silently.
+        if (!ModelState.IsValid)
+        {
+            return NotFound();
+        }
 
-        return View(places);
+        var placeTypes = await studyPlaceService.GetPlaceTypesAsync();
+
+        if (typeId.HasValue && placeTypes.All(t => t.Id != typeId.Value))
+        {
+            return NotFound();
+        }
+
+        search = string.IsNullOrWhiteSpace(search) ? null : search.Trim();
+
+        var model = new StudyPlaceIndexViewModel
+        {
+            Search = search,
+            PlaceTypeId = typeId,
+            PlaceTypes = placeTypes
+                .Select(t => new SelectListItem(t.Name, t.Id.ToString(), t.Id == typeId))
+                .ToList(),
+            Places = await studyPlaceService.GetAllAsync(search, typeId)
+        };
+
+        return View(model);
     }
 
     public async Task<IActionResult> Details(int id)

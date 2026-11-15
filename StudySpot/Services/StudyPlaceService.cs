@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using StudySpot.Data;
 using StudySpot.Data.Entities;
 using StudySpot.ViewModels.StudyPlaces;
+using static StudySpot.Common.ValidationConstants;
 
 namespace StudySpot.Services;
 
@@ -14,10 +15,29 @@ public class StudyPlaceService : IStudyPlaceService
         this.context = context;
     }
 
-    public async Task<IReadOnlyList<StudyPlaceListItemViewModel>> GetAllAsync()
+    public async Task<IReadOnlyList<StudyPlaceListItemViewModel>> GetAllAsync(string? search, int? placeTypeId)
     {
-        return await context.StudyPlaces
-            .AsNoTracking()
+        var query = context.StudyPlaces.AsNoTracking();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var term = search.Trim();
+
+            // No name or location is this long, and a longer term would exceed the SQL parameter size.
+            if (term.Length > Math.Max(PlaceNameMaxLength, PlaceLocationMaxLength))
+            {
+                return new List<StudyPlaceListItemViewModel>();
+            }
+
+            query = query.Where(p => p.Name.Contains(term) || p.Location.Contains(term));
+        }
+
+        if (placeTypeId.HasValue)
+        {
+            query = query.Where(p => p.PlaceTypeId == placeTypeId.Value);
+        }
+
+        return await query
             .OrderBy(p => p.Name)
             .ThenBy(p => p.Id)
             .Select(p => new StudyPlaceListItemViewModel

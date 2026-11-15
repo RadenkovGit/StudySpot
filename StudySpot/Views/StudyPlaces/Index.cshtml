@@ -1,4 +1,4 @@
-@model IReadOnlyList<StudyPlaceListItemViewModel>
+@model StudyPlaceIndexViewModel
 
 @{
     ViewData["Title"] = "Study places";
@@ -9,14 +9,45 @@
     <a class="btn btn-primary" asp-action="Create">Add place</a>
 </div>
 
-@if (Model.Count == 0)
-{
-    <div class="alert alert-info">
-        You have no study places yet. <a asp-action="Create">Add your first place</a>.
+<form asp-action="Index" method="get" class="row g-2 align-items-end mb-4">
+    <div class="col-12 col-md-5">
+        <label for="search" class="form-label">Search</label>
+        <input id="search" name="search" value="@Model.Search" maxlength="120" class="form-control" placeholder="Name or location" />
     </div>
+    <div class="col-12 col-sm-6 col-md-4">
+        <label for="typeId" class="form-label">Type</label>
+        <select id="typeId" name="typeId" asp-items="Model.PlaceTypes" class="form-select">
+            <option value="">All types</option>
+        </select>
+    </div>
+    <div class="col-12 col-sm-6 col-md-3 d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a class="btn btn-outline-secondary" asp-action="Index">Clear</a>
+    </div>
+</form>
+
+@if (Model.Places.Count == 0)
+{
+    if (Model.HasFilters)
+    {
+        <div class="alert alert-info">
+            No study places match your search. <a asp-action="Index">Clear the filters</a> to see all places.
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            You have no study places yet. <a asp-action="Create">Add your first place</a>.
+        </div>
+    }
 }
 else
 {
+    @if (Model.HasFilters)
+    {
+        <p class="text-muted">@Model.Places.Count @(Model.Places.Count == 1 ? "place" : "places") found.</p>
+    }
+
     <div class="table-responsive">
         <table class="table table-hover align-middle">
             <thead>
@@ -30,7 +61,7 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var place in Model)
+                @foreach (var place in Model.Places)
                 {
                     <tr>
                         <td>@place.Name</td>

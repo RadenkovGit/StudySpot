@@ -4,7 +4,7 @@ namespace StudySpot.Services;
 
 public interface IStudyPlaceService
 {
-    Task<IReadOnlyList<StudyPlaceListItemViewModel>> GetAllAsync();
+    Task<IReadOnlyList<StudyPlaceListItemViewModel>> GetAllAsync(string? search, int? placeTypeId);
 
     Task<StudyPlaceDetailsViewModel?> GetDetailsAsync(int id);
 
