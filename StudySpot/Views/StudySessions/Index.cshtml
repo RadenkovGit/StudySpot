@@ -5,7 +5,7 @@
     ViewData["Title"] = isFiltered ? $"Sessions - {Model.PlaceName}" : "Study sessions";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-2">
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
     <h1 class="mb-0">Study sessions</h1>
     <a class="btn btn-success" asp-action="Create" asp-route-placeId="@Model.PlaceId">Record session</a>
 </div>
@@ -59,12 +59,12 @@ else
                         </td>
                         @if (!isFiltered)
                         {
-                            <td>
+                            <td class="text-break">
                                 <a asp-controller="StudyPlaces" asp-action="Details" asp-route-id="@session.StudyPlaceId">@session.PlaceName</a>
                             </td>
                         }
                         <td class="text-nowrap">@session.DurationMinutes min</td>
-                        <td class="d-none d-sm-table-cell">@(string.IsNullOrWhiteSpace(session.Notes) ? "-" : session.Notes)</td>
+                        <td class="d-none d-sm-table-cell text-break">@(string.IsNullOrWhiteSpace(session.Notes) ? "-" : session.Notes)</td>
                         <td class="text-end">
                             <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@session.Id">Delete</a>
                         </td>
@@ -74,3 +74,14 @@ else
         </table>
     </div>
 }
+
+<div class="mt-4">
+    @if (isFiltered)
+    {
+        <a class="btn btn-outline-secondary" asp-controller="StudyPlaces" asp-action="Details" asp-route-id="@Model.PlaceId">Back to place</a>
+    }
+    else
+    {
+        <a class="btn btn-outline-secondary" asp-controller="Home" asp-action="Index">Back to home</a>
+    }
+</div>

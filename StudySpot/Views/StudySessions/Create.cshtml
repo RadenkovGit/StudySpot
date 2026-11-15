@@ -46,8 +46,10 @@ else
                     <span asp-validation-for="Notes" class="text-danger"></span>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Record session</button>
-                <a class="btn btn-outline-secondary" asp-controller="StudyPlaces" asp-action="Index">Cancel</a>
+                <div class="d-flex flex-wrap gap-2">
+                    <button type="submit" class="btn btn-primary">Record session</button>
+                    <a class="btn btn-outline-secondary" asp-action="Index">Back to sessions</a>
+                </div>
             </form>
         </div>
     </div>

@@ -4,7 +4,7 @@
     ViewData["Title"] = "Study places";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
     <h1 class="mb-0">Study places</h1>
     <a class="btn btn-primary" asp-action="Create">Add place</a>
 </div>
@@ -55,7 +55,7 @@ else
                     <th>Name</th>
                     <th>Type</th>
                     <th class="d-none d-md-table-cell">Location</th>
-                    <th class="d-none d-sm-table-cell">Wi-Fi</th>
+                    <th class="d-none d-sm-table-cell text-nowrap">Wi-Fi</th>
                     <th class="d-none d-sm-table-cell">Power outlets</th>
                     <th></th>
                 </tr>
@@ -64,9 +64,15 @@ else
                 @foreach (var place in Model.Places)
                 {
                     <tr>
-                        <td>@place.Name</td>
+                        <td class="text-break">
+                            @place.Name
+                            <div class="d-md-none small text-muted text-break">@place.Location</div>
+                            <div class="d-sm-none small text-muted">
+                                Wi-Fi: @(place.HasWifi ? "yes" : "no") &middot; Power outlets: @(place.HasPowerOutlets ? "yes" : "no")
+                            </div>
+                        </td>
                         <td>@place.PlaceTypeName</td>
-                        <td class="d-none d-md-table-cell">@place.Location</td>
+                        <td class="d-none d-md-table-cell text-break">@place.Location</td>
                         <td class="d-none d-sm-table-cell">@(place.HasWifi ? "Yes" : "No")</td>
                         <td class="d-none d-sm-table-cell">@(place.HasPowerOutlets ? "Yes" : "No")</td>
                         <td class="text-end">
@@ -78,3 +84,7 @@ else
         </table>
     </div>
 }
+
+<div class="mt-4">
+    <a class="btn btn-outline-secondary" asp-controller="Home" asp-action="Index">Back to home</a>
+</div>

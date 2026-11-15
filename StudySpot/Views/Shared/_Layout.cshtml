@@ -1,3 +1,10 @@
+@{
+    var controllerName = ViewContext.RouteData.Values["controller"]?.ToString();
+    var actionName = ViewContext.RouteData.Values["action"]?.ToString();
+    var isHome = controllerName == "Home" && actionName == "Index";
+    var isPlaces = controllerName == "StudyPlaces";
+    var isSessions = controllerName == "StudySessions";
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,13 +28,13 @@
                 <div class="navbar-collapse collapse" id="mainNav">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark @(isHome ? "active" : null)" aria-current="@(isHome ? "page" : null)" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="StudyPlaces" asp-action="Index">Places</a>
+                            <a class="nav-link text-dark @(isPlaces ? "active" : null)" aria-current="@(isPlaces ? "page" : null)" asp-area="" asp-controller="StudyPlaces" asp-action="Index">Places</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="StudySessions" asp-action="Index">Sessions</a>
+                            <a class="nav-link text-dark @(isSessions ? "active" : null)" aria-current="@(isSessions ? "page" : null)" asp-area="" asp-controller="StudySessions" asp-action="Index">Sessions</a>
                         </li>
                     </ul>
                 </div>

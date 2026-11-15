@@ -13,7 +13,7 @@
 
 <dl class="row">
     <dt class="col-sm-3">Place</dt>
-    <dd class="col-sm-9">@Model.PlaceName</dd>
+    <dd class="col-sm-9 text-break">@Model.PlaceName</dd>
 
     <dt class="col-sm-3">Date</dt>
     <dd class="col-sm-9">@Model.Date.ToString("yyyy-MM-dd")</dd>
@@ -22,10 +22,10 @@
     <dd class="col-sm-9">@Model.DurationMinutes min</dd>
 
     <dt class="col-sm-3">Notes</dt>
-    <dd class="col-sm-9">@(string.IsNullOrWhiteSpace(Model.Notes) ? "No notes." : Model.Notes)</dd>
+    <dd class="col-sm-9 text-break">@(string.IsNullOrWhiteSpace(Model.Notes) ? "No notes." : Model.Notes)</dd>
 </dl>
 
-<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-flex flex-wrap gap-2">
     <button type="submit" class="btn btn-danger">Delete</button>
-    <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+    <a class="btn btn-outline-secondary" asp-action="Index">Back to sessions</a>
 </form>

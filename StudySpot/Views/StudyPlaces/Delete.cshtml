@@ -23,19 +23,19 @@
 
 <dl class="row">
     <dt class="col-sm-3">Name</dt>
-    <dd class="col-sm-9">@Model.Name</dd>
+    <dd class="col-sm-9 text-break">@Model.Name</dd>
 
     <dt class="col-sm-3">Type</dt>
     <dd class="col-sm-9">@Model.PlaceTypeName</dd>
 
     <dt class="col-sm-3">Location</dt>
-    <dd class="col-sm-9">@Model.Location</dd>
+    <dd class="col-sm-9 text-break">@Model.Location</dd>
 
     <dt class="col-sm-3">Study sessions</dt>
     <dd class="col-sm-9">@Model.SessionsCount</dd>
 </dl>
 
-<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-flex flex-wrap gap-2">
     <button type="submit" class="btn btn-danger">Delete</button>
-    <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id">Cancel</a>
+    <a class="btn btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id">Back to details</a>
 </form>
