@@ -1,0 +1,76 @@
+@model StudySessionHistoryViewModel
+
+@{
+    var isFiltered = Model.PlaceId.HasValue;
+    ViewData["Title"] = isFiltered ? $"Sessions - {Model.PlaceName}" : "Study sessions";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-2">
+    <h1 class="mb-0">Study sessions</h1>
+    <a class="btn btn-success" asp-action="Create" asp-route-placeId="@Model.PlaceId">Record session</a>
+</div>
+
+@if (isFiltered)
+{
+    <p class="text-muted">
+        Showing sessions for
+        <a asp-controller="StudyPlaces" asp-action="Details" asp-route-id="@Model.PlaceId">@Model.PlaceName</a>.
+        <a asp-action="Index">Show all sessions</a>
+    </p>
+}
+else
+{
+    <p class="text-muted">Newest sessions first.</p>
+}
+
+@if (Model.Sessions.Count == 0)
+{
+    <div class="alert alert-info">
+        @(isFiltered ? "No sessions are recorded for this place yet." : "You have not recorded any study sessions yet.")
+        <a asp-action="Create" asp-route-placeId="@Model.PlaceId">Record a session</a>.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    @if (!isFiltered)
+                    {
+                        <th>Place</th>
+                    }
+                    <th>Duration</th>
+                    <th class="d-none d-sm-table-cell">Notes</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var session in Model.Sessions)
+                {
+                    <tr>
+                        <td>
+                            <span class="text-nowrap">@session.Date.ToString("yyyy-MM-dd")</span>
+                            @if (!string.IsNullOrWhiteSpace(session.Notes))
+                            {
+                                <div class="d-sm-none small text-muted text-break">@session.Notes</div>
+                            }
+                        </td>
+                        @if (!isFiltered)
+                        {
+                            <td>
+                                <a asp-controller="StudyPlaces" asp-action="Details" asp-route-id="@session.StudyPlaceId">@session.PlaceName</a>
+                            </td>
+                        }
+                        <td class="text-nowrap">@session.DurationMinutes min</td>
+                        <td class="d-none d-sm-table-cell">@(string.IsNullOrWhiteSpace(session.Notes) ? "-" : session.Notes)</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@session.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

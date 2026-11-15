@@ -9,4 +9,12 @@ public interface IStudySessionService
     Task<bool> PlaceExistsAsync(int placeId);
 
     Task CreateAsync(StudySessionFormViewModel model);
+
+    Task<string?> GetPlaceNameAsync(int placeId);
+
+    Task<IReadOnlyList<StudySessionListItemViewModel>> GetHistoryAsync(int? placeId);
+
+    Task<StudySessionListItemViewModel?> GetAsync(int id);
+
+    Task<bool> DeleteAsync(int id);
 }

@@ -16,6 +16,59 @@ public class StudySessionsController : Controller
     }
 
     [HttpGet]
+    public async Task<IActionResult> Index(int? placeId)
+    {
+        if (!ModelState.IsValid)
+        {
+            return NotFound();
+        }
+
+        var model = new StudySessionHistoryViewModel { PlaceId = placeId };
+
+        if (placeId.HasValue)
+        {
+            model.PlaceName = await studySessionService.GetPlaceNameAsync(placeId.Value);
+
+            if (model.PlaceName == null)
+            {
+                return NotFound();
+            }
+        }
+
+        model.Sessions = await studySessionService.GetHistoryAsync(placeId);
+
+        return View(model);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var session = await studySessionService.GetAsync(id);
+
+        if (session == null)
+        {
+            return NotFound();
+        }
+
+        return View(session);
+    }
+
+    [HttpPost]
+    [ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed([FromRoute] int id)
+    {
+        if (!await studySessionService.DeleteAsync(id))
+        {
+            return NotFound();
+        }
+
+        TempData["SuccessMessage"] = "The study session was deleted.";
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpGet]
     public async Task<IActionResult> Create(int? placeId)
     {
         // A malformed or unknown placeId is an error, not something to ignore silently.

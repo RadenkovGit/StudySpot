@@ -42,4 +42,63 @@ public class StudySessionService : IStudySessionService
         context.StudySessions.Add(session);
         await context.SaveChangesAsync();
     }
+
+    public async Task<string?> GetPlaceNameAsync(int placeId)
+    {
+        return await context.StudyPlaces
+            .AsNoTracking()
+            .Where(p => p.Id == placeId)
+            .Select(p => p.Name)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<IReadOnlyList<StudySessionListItemViewModel>> GetHistoryAsync(int? placeId)
+    {
+        var query = context.StudySessions.AsNoTracking();
+
+        if (placeId.HasValue)
+        {
+            query = query.Where(s => s.StudyPlaceId == placeId.Value);
+        }
+
+        return await query
+            .OrderByDescending(s => s.Date)
+            .ThenByDescending(s => s.Id)
+            .Select(s => new StudySessionListItemViewModel
+            {
+                Id = s.Id,
+                StudyPlaceId = s.StudyPlaceId,
+                PlaceName = s.StudyPlace.Name,
+                Date = s.Date,
+                DurationMinutes = s.DurationMinutes,
+                Notes = s.Notes
+            })
+            .ToListAsync();
+    }
+
+    public async Task<StudySessionListItemViewModel?> GetAsync(int id)
+    {
+        return await context.StudySessions
+            .AsNoTracking()
+            .Where(s => s.Id == id)
+            .Select(s => new StudySessionListItemViewModel
+            {
+                Id = s.Id,
+                StudyPlaceId = s.StudyPlaceId,
+                PlaceName = s.StudyPlace.Name,
+                Date = s.Date,
+                DurationMinutes = s.DurationMinutes,
+                Notes = s.Notes
+            })
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var deletedRows = await context.StudySessions
+            .Where(s => s.Id == id)
+            .ExecuteDeleteAsync();
+
+        return deletedRows > 0;
+    }
 }

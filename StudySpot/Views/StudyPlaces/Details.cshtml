@@ -22,6 +22,7 @@
 </dl>
 
 <a class="btn btn-success" asp-controller="StudySessions" asp-action="Create" asp-route-placeId="@Model.Id">Record session</a>
+<a class="btn btn-outline-success" asp-controller="StudySessions" asp-action="Index" asp-route-placeId="@Model.Id">Session history</a>
 <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
 <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
 <a class="btn btn-outline-secondary" asp-action="Index">Back to places</a>
