@@ -1,14 +1,26 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using StudySpot.Models;
+using StudySpot.Services;
 
 namespace StudySpot.Controllers;
 
 public class HomeController : Controller
 {
-    public IActionResult Index()
+    private const int RecentSessionsCount = 5;
+
+    private readonly IStudySessionService studySessionService;
+
+    public HomeController(IStudySessionService studySessionService)
     {
-        return View();
+        this.studySessionService = studySessionService;
+    }
+
+    public async Task<IActionResult> Index()
+    {
+        var recentSessions = await studySessionService.GetRecentAsync(RecentSessionsCount);
+
+        return View(recentSessions);
     }
 
     public IActionResult Status(int code)

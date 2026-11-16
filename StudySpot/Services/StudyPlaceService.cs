@@ -65,7 +65,9 @@ public class StudyPlaceService : IStudyPlaceService
                 Notes = p.Notes,
                 PlaceTypeName = p.PlaceType.Name,
                 HasWifi = p.HasWifi,
-                HasPowerOutlets = p.HasPowerOutlets
+                HasPowerOutlets = p.HasPowerOutlets,
+                SessionsCount = p.StudySessions.Count(),
+                TotalMinutes = p.StudySessions.Sum(s => s.DurationMinutes)
             })
             .FirstOrDefaultAsync();
     }

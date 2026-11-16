@@ -17,6 +17,12 @@
     <dt class="col-sm-3">Power outlets</dt>
     <dd class="col-sm-9">@(Model.HasPowerOutlets ? "Yes" : "No")</dd>
 
+    <dt class="col-sm-3">Study sessions</dt>
+    <dd class="col-sm-9">@Model.SessionsCount</dd>
+
+    <dt class="col-sm-3">Total study time</dt>
+    <dd class="col-sm-9">@Model.TotalMinutes min</dd>
+
     <dt class="col-sm-3">Notes</dt>
     <dd class="col-sm-9 text-break">@(string.IsNullOrWhiteSpace(Model.Notes) ? "No notes." : Model.Notes)</dd>
 </dl>

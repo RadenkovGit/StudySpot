@@ -15,4 +15,8 @@ public class StudyPlaceDetailsViewModel
     public bool HasWifi { get; set; }
 
     public bool HasPowerOutlets { get; set; }
+
+    public int SessionsCount { get; set; }
+
+    public int TotalMinutes { get; set; }
 }

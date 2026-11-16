@@ -14,6 +14,8 @@ public interface IStudySessionService
 
     Task<IReadOnlyList<StudySessionListItemViewModel>> GetHistoryAsync(int? placeId);
 
+    Task<IReadOnlyList<StudySessionListItemViewModel>> GetRecentAsync(int count);
+
     Task<StudySessionListItemViewModel?> GetAsync(int id);
 
     Task<bool> DeleteAsync(int id);

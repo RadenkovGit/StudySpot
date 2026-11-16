@@ -76,6 +76,25 @@ public class StudySessionService : IStudySessionService
             .ToListAsync();
     }
 
+    public async Task<IReadOnlyList<StudySessionListItemViewModel>> GetRecentAsync(int count)
+    {
+        return await context.StudySessions
+            .AsNoTracking()
+            .OrderByDescending(s => s.Date)
+            .ThenByDescending(s => s.Id)
+            .Take(count)
+            .Select(s => new StudySessionListItemViewModel
+            {
+                Id = s.Id,
+                StudyPlaceId = s.StudyPlaceId,
+                PlaceName = s.StudyPlace.Name,
+                Date = s.Date,
+                DurationMinutes = s.DurationMinutes,
+                Notes = s.Notes
+            })
+            .ToListAsync();
+    }
+
     public async Task<StudySessionListItemViewModel?> GetAsync(int id)
     {
         return await context.StudySessions
